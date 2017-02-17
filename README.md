@@ -118,7 +118,21 @@ Configuring the consumer can be done both manually or from the command line:
                                                             'deadLetterExchangeName' => 'dlx',
                                                             'deadLetterExchangeType' => 'direct',
                                                             'deadLetterRoutingKey' => 'warning',
-                                                            'messageTTL' => null
+                                                            'messageTTL' => null,
+                                                        ]);
+
+    Registrator::queue('publishing', 'App\Messaging\Handlers\PublishingHandler', [
+                                                            'exchangeName' => 'main_exchange',
+                                                            'exchangeType'=> 'direct',
+                                                            'bindingKeys' => [
+                                                                'warning',
+                                                                'notification'
+                                                            ],
+                                                            'pasive' => false,
+                                                            'durable' => true,
+                                                            'autoDelete' => false,
+                                                            'deadLetterRetries' => true
+                                                            'messageTTL' => 4000,
                                                         ]);
 
     ```
@@ -287,7 +301,12 @@ php artisan bowler:consume my_app_queue --deadLetterQueueName=my_app_dlq --deadL
 
 > If only one of the mentioned optional parameters are set, the second will default to it. Leading to the same `dlx` and `dlq` name.
 
-If you would like to avoid using Dead Lettering, you could leverage a striped down behaviour, by requeueing dead messages using `$broker->rejectMessage(true)` in the queue's `MessageHandler::handleError()`.
+If you would like to avoid using Dead Lettering, you could leverage a striped down behaviour, by requeueing dead messages using `$broker->rejectMessage(true)` in the queue's `MessageHandler::handleError()`. Be on the watch for any tight loops.
+
+### Dead Retry
+To be updated.
+
+> Please note that Dead Lettering and Dead Retry are exclusive, meaning, either you use one or the other.
 
 ### Error Handling
 Error Handling in Bowler is limited to application exceptions.

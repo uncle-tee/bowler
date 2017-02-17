@@ -89,6 +89,8 @@ class ConsumeCommand extends Command
                     $deadLetterExchangeName = $deadLetterExchangeName ?? $deadLetterQueueName;
 
                     $bowlerConsumer->configureDeadLettering($deadLetterQueueName, $deadLetterExchangeName, $deadLetterExchangeType, $deadLetterRoutingKey, $messageTTL);
+                } elseif ($deadLetterRetries) {
+                    $bowlerConsumer->configureRetries($messageTTL);
                 }
                 $bowlerConsumer->listenToQueue($handler->className, app(BowlerExceptionHandler::class));
             }

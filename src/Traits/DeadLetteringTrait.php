@@ -36,6 +36,28 @@ trait DeadLetteringTrait
         $this->compileArguments($deadLetterExchangeName, $deadLetterRoutingKey, $messageTTL);
     }
 
+
+    public function configureRetries($messageTTL = 2000, $deadRetryQueueName = 'dlq_retry', $deadRetryExchangeName = 'dlx_retry', $deadRetryRoutingKey = null)
+    {
+        $channel = $this->connection->getChannel();
+
+        // Compile arguments for the retry queue in order to set its dlx to the main exchange, thus completing the loop
+        $this->compileArguments($this->exchangeName, null, $messageTTL);
+
+        try {
+            $channel->exchange_declare($deadRetryExchangeName, 'fanout', false, true, false);
+
+            $channel->queue_declare($deadRetryQueueName, false, true, false, false, false, $this->arguments);
+        } catch (\Exception $e) {
+            app(BowlerExceptionHandler::class)->handleServerException($e, compact($deadRetryQueueName, $deadRetryExchangeName, $messageTTL), $this->arguments);
+        }
+
+        $channel->queue_bind($deadRetryQueueName, $deadRetryExchangeName, $deadRetryRoutingKey);
+
+        // Reset arguments so that our main queue sets his dlx to the retry exchange
+        $this->compileArguments($deadRetryExchangeName, null, 0);
+    }
+
     /**
      * Compiles the arguments array to be passed to the messaging queue.
      *
