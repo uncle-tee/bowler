@@ -118,7 +118,7 @@ Configuring the consumer can be done both manually or from the command line:
                                                             'deadLetterExchangeName' => 'dlx',
                                                             'deadLetterExchangeType' => 'direct',
                                                             'deadLetterRoutingKey' => 'warning',
-                                                            'messageTTL' => null,
+                                                            'messageTTL' => null
                                                         ]);
 
     Registrator::queue('publishing', 'App\Messaging\Handlers\PublishingHandler', [
@@ -131,8 +131,8 @@ Configuring the consumer can be done both manually or from the command line:
                                                             'pasive' => false,
                                                             'durable' => true,
                                                             'autoDelete' => false,
-                                                            'deadLetterRetries' => true
-                                                            'messageTTL' => 4000,
+                                                            'deadLetterRetries' => true,
+                                                            'messageTTL' => 4000
                                                         ]);
 
     ```
@@ -303,8 +303,11 @@ php artisan bowler:consume my_app_queue --deadLetterQueueName=my_app_dlq --deadL
 
 If you would like to avoid using Dead Lettering, you could leverage a striped down behaviour, by requeueing dead messages using `$broker->rejectMessage(true)` in the queue's `MessageHandler::handleError()`. Be on the watch for any tight loops.
 
-### Dead Retry
-To be updated.
+### Dead Letter Retries
+Although the implementation re-queue dead messages successfully to the main queue, it conflicts with other error handling that reject/nack messages where these will also be re-queued like in the case of `InvalidInputException`.
+Moreover, Dead Letter Retries limitation is it being exclusive, meaning, either the queue implements dead lettering or dead letter retries.
+
+To be re-thought and updated accordingly.
 
 > Please note that Dead Lettering and Dead Retry are exclusive, meaning, either you use one or the other.
 
