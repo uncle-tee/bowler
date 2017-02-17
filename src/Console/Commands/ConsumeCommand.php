@@ -39,7 +39,8 @@ class ConsumeCommand extends Command
                             {--deadLetterExchangeName= : The dead letter exchange NAME. Defaults to deadLetterQueueName}
                             {--deadLetterExchangeType=fanout : The dead letter exchange TYPE. Supported exchanges: fanout, direct, topic. Defaults to fanout}
                             {--deadLetterRoutingKey= : The dead letter ROUTING KEY}
-                            {--messageTTL= : If set, specifies how long, in milliseconds, before a message is declared dead letter}';
+                            {--messageTTL= : If set, specifies how long, in milliseconds, before a message is declared dead letter}
+                            {--deadLetterRetries= : If set, specifies that unacknowledge messages should be sent to the default retry dead letter exchange}';
 
     /**
      * The console command description.
@@ -69,6 +70,7 @@ class ConsumeCommand extends Command
         $deadLetterExchangeType = $this->option('deadLetterExchangeType');
         $deadLetterRoutingKey = $this->option('deadLetterRoutingKey');
         $messageTTL = ($ttl = $this->option('messageTTL')) ? (int) $ttl : null;
+        $deadLetterRetries = (bool) $this->option('deadLetterRetries');
 
         require app_path().'/Messaging/queues.php';
         $handlers = Registrator::getHandlers();
