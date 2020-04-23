@@ -2,7 +2,14 @@
     "name": "vinelab/bowler",
     "description": "A Rabbitmq wrapper for Laravel",
     "license": "MIT",
-    "keywords": ["php", "json", "rabbitmq", "amqp", "api", "microservices"],
+    "keywords": [
+        "php",
+        "json",
+        "rabbitmq",
+        "amqp",
+        "api",
+        "microservices"
+    ],
     "authors": [
         {
             "name": "Ali Issa",
@@ -18,38 +25,33 @@
         {
             "name": "Abed Halawi",
             "email": "abed.halawi@vinelab.com",
-            "homepage":"https://github.com/Mulkave",
+            "homepage": "https://github.com/Mulkave",
             "role": "Tech Lead"
         }
     ],
-
     "require": {
         "php": ">=7.0",
         "php-amqplib/php-amqplib": ">=2.8.1",
-        "illuminate/console": "5.4.*|5.5.*|5.6.*|5.7.*|5.8.* || ^6",
-        "illuminate/support": "5.4.*|5.5.*|5.6.*|5.7.*|5.8.* || ^6",
-        "illuminate/filesystem": "5.4.*|5.5.*|5.6.*|5.7.*|5.8.* || ^6",
+        "illuminate/console": "5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|5.8.*|~6.0|~7.06",
+        "illuminate/support": "5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|5.8.*|~6.0|~7.0",
+        "illuminate/filesystem": "5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|~6.0|~7.0",
         "vinelab/http": "^1.5"
     },
-
     "require-dev": {
         "mockery/mockery": "^1.0",
         "orchestra/testbench": "3.4.* || ^4",
         "phpunit/phpunit": "~5.7 || ~8.3"
     },
-
     "autoload": {
         "psr-4": {
             "Vinelab\\Bowler\\": "src/"
         }
     },
-
     "autoload-dev": {
         "psr-4": {
             "Vinelab\\Bowler\\Tests\\": "tests/"
         }
     },
-
     "extra": {
         "laravel": {
             "providers": [
